@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto lg:px-8 text-white mt-6">
         <div>
-            <h2 class="text-3xl font-extrabold mx-3">Jobs and Internships</h2>
+            <h1 class="text-3xl font-extrabold mx-3">Jobs and Internships</h1>
         </div>
     </div>
     <div class="mt-4">
