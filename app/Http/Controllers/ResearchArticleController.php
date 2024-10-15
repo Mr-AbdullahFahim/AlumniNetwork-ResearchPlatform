@@ -11,35 +11,44 @@ class ResearchArticleController extends Controller
 {
     // Store a new research article
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'author' => 'required',
-            'file' => 'required|mimes:pdf|max:10000', // Max 10MB
-        ]);
+{
+    // Validate the incoming request data
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'author' => 'required',
+        'file' => 'required|mimes:pdf|max:10000', // Max 10MB
+    ]);
 
-        // Save article metadata
+    // Ensure the directory exists
+    if (!Storage::exists('public/research_articles')) {
+        Storage::makeDirectory('public/research_articles');
+    }
+
+    // Handle file upload
+    $file = $request->file('file');
+    $fileName = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+    $filePath = $file->storeAs('public/research_articles', $fileName);
+
+    // Check if the file was stored successfully
+    if (Storage::exists($filePath)) {
+        // Save article metadata to the database
         $article = ResearchArticle::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'author' => $request->input('author'),
         ]);
 
-        // Handle file upload
-        $file = $request->file('file');
-        $fileName = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $filePath = $file->storeAs('public/research_articles', $fileName);
-
-        // Create an initial version
+        // Create an initial version in the ArticleVersion table
         ArticleVersion::create([
             'article_id' => $article->id,
             'file_path' => $filePath,
             'version' => 1,
         ]);
+        echo "inside the function";
+    } 
+}
 
-        return redirect()->back()->with('success', 'Article uploaded successfully!');
-    }
 
     public function create()
     {
