@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
@@ -16,10 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
- // Admin Dashboard route with role middleware
- Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
- ->name('admin.dashboard')
- ->middleware('role:admin');
+// Admin Dashboard route with role middleware
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+    ->middleware(RoleMiddleware::class . ':admin')
+    ->name('admin.dashboard');
+
+ Route::get('/admin', function () {
+    return redirect()->route('admin.dashboard');
+});
 
 // Route to list all research articles  
 Route::get('/research-articles', [ResearchArticleController::class, 'index'])->name('research.index');
@@ -39,16 +44,19 @@ Route::post('/research-articles/{id}/new-version', [ResearchArticleController::c
 
 
 Route::prefix('admin')->group(function () {
-    Route::get('/home', [AdminController::class, 'index'])->name('admin.home');
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::get('/approvals', [AdminController::class, 'approvals'])->name('admin.approvals');
-    Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
-    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
-    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
-    Route::post('/approve/{id}', [AdminController::class, 'approve'])->name('admin.approve');
-    Route::post('/deny/{id}', [AdminController::class, 'deny'])->name('admin.deny');
-    Route::get('/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
+    Route::get('/home', [AdminDashboardController::class, 'index'])->name('admin.home');
+    Route::get('/users', [AdminDashboardController::class, 'users'])->name('admin.users');
+    Route::get('/approvals', [AdminDashboardController::class, 'approvals'])->name('admin.approvals');
+    Route::get('/reports', [AdminDashboardController::class, 'reports'])->name('admin.reports');
+    Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('admin.settings');
+    Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('admin.profile');
+    Route::post('/approve/{id}', [AdminDashboardController::class, 'approve'])->name('admin.approve');
+    Route::post('/deny/{id}', [AdminDashboardController::class, 'deny'])->name('admin.deny');
+    Route::get('/notifications', [AdminDashboardController::class, 'notifications'])->name('admin.notifications');
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout')->middleware('auth:admin');
+    Route::get('/inbox', [AdminInboxController::class, 'index'])->name('admin.inbox')->middleware('auth:admin');
 });
+
 
 
 require __DIR__.'/auth.php';
