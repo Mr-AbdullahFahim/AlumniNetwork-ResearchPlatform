@@ -13,13 +13,12 @@
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Custom CSS -->
 
     <style>
         /* General Body Styles */
         body {
-            background-color: #121417; /* Darker shade for better contrast */
-            color: #f1f1f1; /* Soft white text for better readability */
+            background-color: #121417;
+            color: #f1f1f1;
             font-family: 'Arial', sans-serif;
         }
 
@@ -54,6 +53,39 @@
             background-color: #0984e3;
             color: #fff;
             border-radius: 5px;
+        }
+
+        .icon-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-bar a {
+            margin-right: 20px;
+            position: relative;
+            color: #fff;
+        }
+
+        /* Notification Badge Styles */
+        /* .icon-bar .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 12px;
+        } */
+
+        /* Badge Styles */
+        .badge {
+            background-color: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-left: 5px;
         }
 
         /* Main Content Area */
@@ -96,13 +128,13 @@
         }
 
         .stat-box h3 {
-            font-size: 16px; /* Reduced text size for titles */
+            font-size: 16px;
             margin-bottom: 10px;
             color: #fff;
         }
 
         .stat-box p {
-            font-size: 24px; /* Reduced text size for numbers */
+            font-size: 24px;
             font-weight: bold;
             color: #0984e3;
         }
@@ -127,10 +159,12 @@
             padding: 15px;
             text-align: left;
             color: #fff;
+            border-bottom: 1px solid #3b434a; /* Align header with data */
         }
 
         .pending-requests th {
             background-color: #232c35;
+            text-align: left;
         }
 
         .pending-requests tr:hover {
@@ -139,10 +173,21 @@
 
         /* Adjust the "Pending User Requests" Text */
         .pending-requests h4 {
-            font-size: 20px; /* Adjust the font size */
+            font-size: 20px;
             color: #fff;
             margin-bottom: 15px;
+            position: relative;
         }
+
+        /* .pending-requests h4 .badge {
+            background-color: red;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 12px;
+            position: absolute;
+            top: 0;
+            right: -20px;
+        } */
 
         /* Action Buttons */
         .action-buttons button {
@@ -175,50 +220,6 @@
             width: 100%;
             color: #7f8c8d;
         }
-
-        /* Icon Bar Styles */
-        .icon-bar {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .icon-bar a {
-            color: #b2bec3;
-            font-size: 20px;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .icon-bar a:hover {
-            color: #0984e3;
-        }
-
-        /* Badge Styles */
-        .badge {
-            background-color: #e74c3c;
-            color: #fff;
-            border-radius: 50%;
-            padding: 5px 10px;
-            font-size: 14px;
-            margin-left: 5px;
-        }
-
-        /* Dropdown Menu Styles */
-        .dropdown-menu-dark {
-            background-color: #2d353d;
-            border: none;
-        }
-
-        .dropdown-menu-dark a {
-            color: #dfe4ea;
-            font-size: 16px;
-        }
-
-        .dropdown-menu-dark a:hover {
-            background-color: #3b434a;
-            color: #fff;
-        }
     </style>
 </head>
 <body>
@@ -229,8 +230,12 @@
             <h4>Admin</h4>
         </div>
         <hr>
-        <a href="{{ route('admin.home') }}" class="{{ Request::is('admin/home') ? 'active' : '' }}">
+        <a href="{{ route('dashboard') }}" class="{{ Request::is('/') ? 'active' : '' }}">
             <i class="fas fa-home"></i> Home
+        </a>
+
+        <a href="{{ route('admin.home') }}" class="{{ Request::is('admin/home') ? 'active' : '' }}">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
         <a href="{{ route('admin.users') }}" class="{{ Request::is('admin/users') ? 'active' : '' }}">
             <i class="fas fa-users"></i> Users
@@ -241,12 +246,6 @@
         <a href="{{ route('admin.reports') }}" class="{{ Request::is('admin/reports') ? 'active' : '' }}">
             <i class="fas fa-chart-line"></i> Reports
         </a>
-        <a href="{{ route('admin.settings') }}" class="{{ Request::is('admin/settings') ? 'active' : '' }}">
-            <i class="fas fa-cog"></i> Settings
-        </a>
-        <a href="{{ route('admin.logout') }}">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
     </div>
 
     <!-- Main Content -->
@@ -254,25 +253,26 @@
         <div class="dashboard-header">
             <h2>Admin Dashboard</h2>
             <div class="icon-bar">
-                <!-- Notification Button -->
                 <a href="{{ route('admin.notifications') }}" title="Notifications">
                     <i class="fas fa-bell fa-lg"></i>
-                    <span class="badge">{{ $pendingRequestsCount }}</span> <!-- Displays pending requests count -->
+                    <span class="badge">{{ $pendingRequestsCount }}</span>
                 </a>
-                <!-- Email/Inbox Button -->
                 <a href="{{ route('admin.inbox') }}" title="Inbox">
                     <i class="fas fa-envelope fa-lg"></i>
                 </a>
-                <!-- Admin Profile Dropdown -->
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle fa-lg"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="{{ route('admin.profile') }}">View Profile</a></li>
-                        <li><a class="dropdown-item" href="{{ route('admin.settings') }}">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ route('admin.logout') }}">Logout</a></li>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ Auth::user()->name }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Settings</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</a>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -290,7 +290,7 @@
             </div>
             <div class="stat-box">
                 <h3>Pending Requests</h3>
-                <p>{{ $pendingRequestsCount }}</p> <!-- Use pendingRequestsCount variable -->
+                <p>{{ $pendingRequestsCount }}</p>
             </div>
             <div class="stat-box">
                 <h3>Denied Requests</h3>
@@ -301,42 +301,46 @@
         <!-- Pending Requests Section -->
         <div class="pending-requests">
             <h4>Pending User Requests <span class="badge">{{ $pendingRequestsCount }}</span></h4>
-            <table>
-                <tr>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-                @foreach($pendingRequests as $request)
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Date Requested</th>
+                        <th>User Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pendingRequests as $request)
                         <tr>
                             <td>{{ $request->name }}</td>
                             <td>{{ $request->email }}</td>
-                            <td>{{ $request->type }}</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <form method="POST" action="{{ route('admin.approve', $request->id) }}">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success">Approve</button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.deny', $request->id) }}">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger">Deny</button>
-                                    </form>
-                                </div>
+                            <td>{{ $request->created_at->format('d/m/Y') }}</td>
+                            <td>{{ $request->role }}</td>
+                            <td class="action-buttons">
+                                <form action="{{ route('admin.approve', $request->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </form>
+                                <form action="{{ route('admin.deny', $request->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">Deny</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
+                </tbody>
             </table>
         </div>
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        &copy; 2024 Admin Dashboard. All Rights Reserved.
-    </div>
+    <footer class="footer">
+        &copy; 2024 Admin Dashboard - All Rights Reserved.
+    </footer>
 
-    <!-- Add Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <!-- Add Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
