@@ -1,51 +1,57 @@
 <?php
 
-use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResearchArticleController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
+// Home route
 Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
+// Job listing route
 Route::get('/jobs',[JobController::class,'index'])->name('jobs.index');
 
+// Profile routes (authenticated users)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Dashboard route with role middleware
+// Registration Routes
+Route::get('register', [RegisteredUserController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
+
+
+// Login Routes using AuthenticatedSessionController
+Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('login', [AuthenticatedSessionController::class, 'store']);
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+// Admin Dashboard Routes (Role-based access)
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-    ->middleware(RoleMiddleware::class . ':admin')
+    ->middleware('role:admin')  // Ensure this middleware is correctly configured
     ->name('admin.dashboard');
 
- Route::get('/admin', function () {
+// Route to redirect to admin dashboard
+Route::get('/admin', function () {
     return redirect()->route('admin.dashboard');
 });
 
-// Route to list all research articles  
+// Research Articles Routes
 Route::get('/research-articles', [ResearchArticleController::class, 'index'])->name('research.index');
-
-// Route to store a new article
 Route::post('/research-article', [ResearchArticleController::class, 'store'])->name('research-article.store');
-
-// Route to display the form for adding a research article
 Route::get('/research-article/create', [ResearchArticleController::class, 'create'])->name('research-article.create');
-
-
-// Route to view version history
 Route::get('/research-articles/{id}/versions', [ResearchArticleController::class, 'versionHistory'])->name('research.version_history');
-
-// Route to upload a new version
 Route::post('/research-articles/{id}/new-version', [ResearchArticleController::class, 'uploadNewVersion'])->name('research-articles.upload-version');
 
-
+// Admin Routes under prefix
 Route::prefix('admin')->group(function () {
     Route::get('/home', [AdminDashboardController::class, 'index'])->name('admin.home');
-    Route::get('/users', [AdminDashboardController::class, 'users'])->name('admin.users');
     Route::get('/approvals', [AdminDashboardController::class, 'approvals'])->name('admin.approvals');
     Route::get('/reports', [AdminDashboardController::class, 'reports'])->name('admin.reports');
     Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('admin.settings');
@@ -54,9 +60,19 @@ Route::prefix('admin')->group(function () {
     Route::post('/deny/{id}', [AdminDashboardController::class, 'deny'])->name('admin.deny');
     Route::get('/notifications', [AdminDashboardController::class, 'notifications'])->name('admin.notifications');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout')->middleware('auth:admin');
-    Route::get('/inbox', [AdminInboxController::class, 'index'])->name('admin.inbox')->middleware('auth:admin');
+    Route::get('/inbox', [AdminDashboardController::class, 'index'])->name('admin.inbox')->middleware('auth:admin');
 });
 
+// Admin Users Management Routes
+Route::get('admin/users', [AdminDashboardController::class, 'indexUsers'])->name('admin.users');
+Route::delete('admin/users/{id}', [AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
+Route::post('admin/users/approve/{user}', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
+Route::patch('admin/users/remove/{user}', [AdminDashboardController::class, 'removeUser'])->name('admin.users.remove');
 
+// Waiting Room (pending approval)
+Route::get('/waiting-room', function () {
+    return view('auth.waiting');
+})->name('waiting-room');
 
+// Include the default auth routes
 require __DIR__.'/auth.php';

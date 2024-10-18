@@ -38,4 +38,43 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.home')->with('error', 'User denied successfully');
     }
+
+    public function approveUser(User $user)
+    {
+        $user->status = 'approved';
+        $user->save();
+
+        return redirect()->route('admin.users')->with('success', 'User approved successfully!');
+    }
+
+        public function removeUser(User $user)
+    {
+        // Change the user's status to rejected when "removing"
+        $user->status = 'rejected';
+        $user->save();
+
+        return redirect()->route('admin.users')->with('success', 'User has been removed and status changed to rejected.');
+    }
+
+
+    // User management methods
+
+    public function indexUsers(Request $request)
+    {
+        // Fetch and filter users by role
+        $role = $request->query('role');
+        $users = User::when($role, function ($query) use ($role) {
+            return $query->where('role', $role);
+        })->get();
+
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function destroyUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
+    }
 }

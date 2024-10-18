@@ -1,7 +1,7 @@
 /* General Body Styles */
 body {
-    background-color: #121417; /* Darker shade for better contrast */
-    color: #f1f1f1; /* Soft white text for better readability */
+    background-color: #121417;
+    color: #f1f1f1;
     font-family: 'Arial', sans-serif;
 }
 
@@ -36,6 +36,39 @@ body {
     background-color: #0984e3;
     color: #fff;
     border-radius: 5px;
+}
+
+.icon-bar {
+    display: flex;
+    align-items: center;
+}
+
+.icon-bar a {
+    margin-right: 20px;
+    position: relative;
+    color: #fff;
+}
+
+/* Notification Badge Styles */
+/* .icon-bar .badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 12px;
+} */
+
+/* Badge Styles */
+.badge {
+    background-color: #e74c3c;
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 5px;
 }
 
 /* Main Content Area */
@@ -78,13 +111,13 @@ body {
 }
 
 .stat-box h3 {
-    font-size: 16px; /* Reduced text size for titles */
+    font-size: 16px;
     margin-bottom: 10px;
     color: #fff;
 }
 
 .stat-box p {
-    font-size: 24px; /* Reduced text size for numbers */
+    font-size: 24px;
     font-weight: bold;
     color: #0984e3;
 }
@@ -109,10 +142,12 @@ body {
     padding: 15px;
     text-align: left;
     color: #fff;
+    border-bottom: 1px solid #3b434a; /* Align header with data */
 }
 
 .pending-requests th {
     background-color: #232c35;
+    text-align: left;
 }
 
 .pending-requests tr:hover {
@@ -121,10 +156,22 @@ body {
 
 /* Adjust the "Pending User Requests" Text */
 .pending-requests h4 {
-    font-size: 20px; /* Adjust the font size */
+    font-size: 20px;
     color: #fff;
     margin-bottom: 15px;
+    position: relative;
 }
+
+/* Pending Requests Badge */
+/* .pending-requests h4 .badge {
+    background-color: red;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    right: -20px;
+} */
 
 /* Action Buttons */
 .action-buttons button {
@@ -142,6 +189,11 @@ body {
     background-color: #74b9ff;
 }
 
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 /* Footer */
 .footer {
     text-align: center;
@@ -151,48 +203,4 @@ body {
     bottom: 0;
     width: 100%;
     color: #7f8c8d;
-}
-
-/* Icon Bar Styles */
-.icon-bar {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.icon-bar a {
-    color: #b2bec3;
-    font-size: 20px;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.icon-bar a:hover {
-    color: #0984e3;
-}
-
-/* Badge Styles */
-.badge {
-    background-color: #e74c3c;
-    color: #fff;
-    border-radius: 50%;
-    padding: 5px 10px;
-    font-size: 14px;
-    margin-left: 5px;
-}
-
-/* Dropdown Menu Styles */
-.dropdown-menu-dark {
-    background-color: #2d353d;
-    border: none;
-}
-
-.dropdown-menu-dark a {
-    color: #dfe4ea;
-    font-size: 16px;
-}
-
-.dropdown-menu-dark a:hover {
-    background-color: #3b434a;
-    color: #fff;
 }
