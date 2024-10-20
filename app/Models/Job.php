@@ -11,7 +11,7 @@ class Job extends Model
 
     protected $table = 'jobsandintern';
 
-    protected $fillable = ['title', 'description', 'company', 'location', 'type', 'posted_at'];
+    protected $fillable = ['user_id', 'title', 'company', 'location_type', 'location', 'description', 'type', 'posted_at'];
 
     protected $casts = [
         'posted_at' => 'datetime',

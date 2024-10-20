@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('research_articles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('title'); 
             $table->text('description'); 
             $table->string('author'); 
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

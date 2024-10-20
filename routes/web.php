@@ -8,12 +8,15 @@ use App\Http\Controllers\ResearchArticleController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\AlumniProfileController;
 
 // Home route
 Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Job listing route
 Route::get('/jobs',[JobController::class,'index'])->name('jobs.index');
+Route::post('/jobs/store', [JobController::class, 'store'])->name('jobs.store');
+
 
 // Profile routes (authenticated users)
 Route::middleware('auth')->group(function () {
@@ -73,6 +76,9 @@ Route::patch('admin/users/remove/{user}', [AdminDashboardController::class, 'rem
 Route::get('/waiting-room', function () {
     return view('auth.waiting');
 })->name('waiting-room');
+
+
+Route::get('/alumni/profile', [AlumniProfileController::class, 'show'])->name('alumni.profile');
 
 // Include the default auth routes
 require __DIR__.'/auth.php';
