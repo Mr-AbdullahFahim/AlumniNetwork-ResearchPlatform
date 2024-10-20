@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jobsandintern', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('company');
-            $table->string('location');
-            $table->string('type');
-            $table->timestamp('posted_at');
-            $table->timestamps();
+            $table->id();  // Primary key, auto-incrementing
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Foreign key referencing users table
+            $table->string('title');  // Job title
+            $table->string('company');  // Company name
+            $table->enum('location_type', ['Onsite', 'Remote', 'Hybrid']);  // Location type
+            $table->string('location')->nullable();  // Location (nullable if Remote)
+            $table->text('description');  // Job or internship description
+            $table->enum('type', ['job', 'internship']);  // Type (job or internship)
+            $table->timestamp('posted_at');  // When the job was posted
+            $table->timestamps();  // Created at and updated at
         });
     }
 

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ResearchArticle extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'author'];
+
+    // Make sure to include 'user_id' in the fillable array
+    protected $fillable = ['title', 'description', 'author', 'user_id']; // Add 'user_id' here
 
     // Relation to versions of the article
     public function versions()

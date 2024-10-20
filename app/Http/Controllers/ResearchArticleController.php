@@ -6,12 +6,14 @@ use App\Models\ResearchArticle;
 use App\Models\ArticleVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ResearchArticleController extends Controller
 {
     // Store a new research article
     public function store(Request $request)
     {
+        // Validate the incoming request data
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -19,33 +21,44 @@ class ResearchArticleController extends Controller
             'file' => 'required|mimes:pdf|max:10000', // Max 10MB
         ]);
 
-        // Save article metadata
-        $article = ResearchArticle::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'author' => $request->input('author'),
-        ]);
+        // Ensure the directory exists
+        $directory = 'public/research_articles';
+        if (!Storage::exists($directory)) {
+            Storage::makeDirectory($directory);
+        }
 
         // Handle file upload
         $file = $request->file('file');
         $fileName = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $filePath = $file->storeAs('public/research_articles', $fileName);
+        $filePath = $file->storeAs($directory, $fileName);
 
-        // Create an initial version
-        ArticleVersion::create([
-            'article_id' => $article->id,
-            'file_path' => $filePath,
-            'version' => 1,
-        ]);
+        // Check if the file was stored successfully
+        if ($filePath) {
+            // Save article metadata to the database
+            $article = ResearchArticle::create([
+                'user_id' => Auth::user()->id,
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'author' => $request->input('author'),
+            ]);
 
-        return redirect()->back()->with('success', 'Article uploaded successfully!');
+            // Create an initial version in the ArticleVersion table
+            ArticleVersion::create([
+                'article_id' => $article->id,
+                'file_path' => $filePath,
+                'version' => 1,
+            ]);
+
+            return redirect()->route('alumni.profile')->with('success', 'Research article uploaded successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Failed to upload the file.');
+        }
     }
 
     public function create()
     {
         return view('research.create'); // The form view for uploading articles
     }
-
 
     // Show all articles
     public function index()
@@ -54,7 +67,6 @@ class ResearchArticleController extends Controller
         $articles = ResearchArticle::with(['latestVersion', 'versions'])->get();
         return view('research.index', compact('articles'));
     }
-
 
     // Show the version history for an article
     public function versionHistory($id)
