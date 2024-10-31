@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AlumniProfileController;
+use App\Http\Controllers\PageController;
 
 // Home route
 Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -17,6 +18,8 @@ Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verif
 Route::get('/jobs',[JobController::class,'index'])->name('jobs.index');
 Route::post('/jobs/store', [JobController::class, 'store'])->name('jobs.store');
 
+// Define the About page route
+Route::get('/about', [PageController::class, 'about'])->name('about');
 
 // Profile routes (authenticated users)
 Route::middleware('auth')->group(function () {
