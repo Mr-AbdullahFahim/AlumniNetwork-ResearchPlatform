@@ -10,6 +10,7 @@ use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AlumniProfileController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserController;
 
 // Home route
 Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -37,6 +38,12 @@ Route::post('register', [RegisteredUserController::class, 'store'])->name('regis
 Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{id}/follow', [UserController::class, 'follow'])->name('users.follow');
+    Route::post('/users/{id}/unfollow', [UserController::class, 'unfollow'])->name('users.unfollow');
+});
 
 // Admin Dashboard Routes (Role-based access)
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])

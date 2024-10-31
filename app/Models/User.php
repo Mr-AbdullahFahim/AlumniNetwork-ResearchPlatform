@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,7 +33,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -44,5 +43,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relationship for the users that this user is following.
+     */
+    public function follows()
+    {
+        return $this->belongsToMany(User::class, 'user_follows', 'follower_id', 'followee_id');
+    }
+
+    /**
+     * Relationship for the users that are following this user.
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'user_follows', 'followee_id', 'follower_id');
     }
 }
