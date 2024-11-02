@@ -35,14 +35,14 @@
                 <!-- Social Links -->
                 <div class="mt-4 flex space-x-4">
                     @if($user->google_scholar)
-                    <a href="{{ $user->google_scholar }}" target="_blank" class="text-gray-400 hover:text-gray-200">
-                        <i class="fab fa-google-scholar text-2xl"></i>
-                    </a>
+                        <a href="{{ $user->google_scholar }}" target="_blank" class="text-gray-400 hover:text-gray-200">
+                            <i class="fab fa-google text-2xl"></i> <!-- Google Scholar icon -->
+                        </a>
                     @endif
                     @if($user->github)
-                    <a href="{{ $user->github }}" target="_blank" class="text-gray-400 hover:text-gray-200">
-                        <i class="fab fa-github text-2xl"></i>
-                    </a>
+                        <a href="{{ $user->github }}" target="_blank" class="text-gray-400 hover:text-gray-200">
+                            <i class="fab fa-github text-2xl"></i> <!-- GitHub icon -->
+                        </a>
                     @endif
                 </div>
             </div>

@@ -61,6 +61,16 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
+        $request->validate([
+            'google_scholar' => 'nullable|url',
+            'github' => 'nullable|url',
+            // Other validation rules
+        ]);
+
+        $user = auth()->user();
+        $user->google_scholar = $request->google_scholar;
+        $user->github = $request->github;
+
         // Save the updated user information
         $user->save();
 
