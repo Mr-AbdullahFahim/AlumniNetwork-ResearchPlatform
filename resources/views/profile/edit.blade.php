@@ -9,8 +9,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Display user's profile image or default profile image -->
             <div class="text-center mb-4">
-                <img src="{{ Auth::user()->profile_image ? asset('storage/profile_images/' . Auth::user()->profile_image) : asset('default-profile.png') }}" 
-                     alt="Profile Image" class="w-24 h-24 rounded-full mx-auto">
+                @if(Auth::check() && Auth::user()->profile_image)
+                    <img src="{{ asset(Auth::user()->profile_image ? 'storage/profile_images/' . Auth::user()->profile_image : 'default-profile.png') }}" 
+                        alt="Profile Image" class="w-24 h-24 rounded-full mx-auto">
+                @endif
             </div>
 
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">

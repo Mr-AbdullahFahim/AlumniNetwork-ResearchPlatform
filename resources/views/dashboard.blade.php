@@ -5,7 +5,9 @@
             <h2 class="text-7xl font-extrabold">Connect and Collaborate <br>to our Academic Community</h2>
             <p class="w-4/5 my-3 text-xl font-thin"><i>We bridge the gap between alumni, students, and faculty, offering a platform for networking, collaboration, and lifelong learning</i></p>
         </div>
-        <button class="w-32 h-12 bg-slate-600 rounded-xl font-semibold mt-2 hover:bg-slate-700">Our Mission</button>
+        <a class="w-32 h-12 bg-slate-600 rounded-xl font-semibold mt-2 hover:bg-slate-700 text-white flex items-center justify-center" href="about">
+            Our Mission
+        </a>
     </div>
     <div class="mt-44">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

@@ -1,10 +1,24 @@
 <x-app-layout>
-    <div class="container mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+    <div class="container mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden" style="max-width: 900px;"> <!-- Fixed width applied here -->
         <!-- Profile Section -->
         <div class="mb-8">
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center relative group"> <!-- Add 'relative' and 'group' classes -->
                 <div class="text-center mb-6">
-                    <img src="https://via.placeholder.com/120" alt="Profile Picture" class="rounded-full mx-auto mb-4">
+                    <div class="w-36 h-36 rounded-full overflow-hidden cursor-pointer" onclick="uploadImg()">
+                        <img src="../../../storage/{{$user->profile_image}}" alt="Profile Picture" 
+                            class="w-full h-full object-cover mx-auto mb-4 hover:opacity-75 transition-opacity duration-300">
+                    </div>
+
+                    <form action="{{route('profile.update')}}" method="post" enctype="multipart/form-data" class="hidden">
+                        @csrf
+                        @method('PATCH')
+                        <input type="file" id="profile_image" name="profile_image" class="hidden" onchange="uploadProfilePic()">
+                        <input type="submit" id="profileUpdate" value="submit" class="hidden">
+                    </form>
+                        @if ($errors->has('profile_image'))
+                            <div class="text-red-500">{{ $errors->first('profile_image') }}</div>
+                        @endif
+                     <!-- Hidden input for file upload -->
                     <h2 class="text-2xl font-semibold">{{ ucfirst($user->name) }}</h2>
                     <p class="text-gray-400 mt-2">{{ $user->profession }}</p>
                 </div>
@@ -12,6 +26,11 @@
                 <p class="text-gray-300 mt-2 text-center px-6 md:px-24">
                     {{ $user->bio }}
                 </p>
+
+                <!-- Feedback for adding profile picture -->
+                <div class="absolute bottom-0 mb-2 text-gray-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to upload a profile picture
+                </div>
 
                 <!-- Social Links -->
                 <div class="mt-4 flex space-x-4">
@@ -29,8 +48,21 @@
             </div>
         </div>
 
+        <script>
+            const profile_image = document.getElementById('profile_image');
+            const profileUpdate = document.getElementById('profileUpdate');
+
+            function uploadImg() {
+                profile_image.click();  // Opens the file picker
+            }
+
+            function uploadProfilePic() {
+                profileUpdate.click();  // Submits the form
+            }
+        </script>
+
         <!-- Jobs Section -->
-         @if($user->role!='user')
+        @if($user->role!='user')
         <div class="mb-8">
             <h3 class="text-xl font-semibold mb-4">Jobs and Internships</h3>
 

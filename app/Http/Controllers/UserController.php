@@ -13,7 +13,7 @@ class UserController extends Controller
         $query = User::query();
 
         // Filter by role (user, admin, alumni)
-        if ($request->has('role') && in_array($request->role, ['user', 'admin', 'alumni'])) {
+        if ($request->has('role') && in_array($request->role, ['user', 'alumni'])) {
             $query->where('role', $request->role);
         }
 
@@ -30,9 +30,9 @@ class UserController extends Controller
                 $query->whereNotIn('id', $followedIds);
             }
         }
-
+        $me=Auth::user();
         $users = $query->get();
-        return view('users.index', compact('users'));
+        return view('users.index', compact('users','me'));
     }
 
     public function follow($id)
