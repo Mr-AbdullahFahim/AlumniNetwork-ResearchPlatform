@@ -147,6 +147,32 @@
             </div>
         </div>
 
+        <!-- Modal for Uploading New Version -->
+        <div id="versionModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3">
+                <h3 class="text-xl font-semibold text-gray-200">Upload New Version</h3>
+                <form id="uploadVersionForm" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="article_id" id="article_id" value="">
+
+                    <!-- Version Number Field -->
+                    <div class="mb-4">
+                        <label for="version" class="block text-gray-300">Version</label>
+                        <input type="text" id="version" name="version" class="w-full px-4 py-2 bg-gray-800 text-white rounded border border-gray-600" placeholder="Enter version number">
+                    </div>
+
+                    <!-- PDF File Upload -->
+                    <div class="mb-4">
+                        <label for="file" class="block text-gray-300">Upload PDF</label>
+                        <input type="file" id="file" name="file" class="w-full bg-gray-800 text-white rounded border border-gray-600">
+                    </div>
+
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">Submit</button>
+                    <button type="button" onclick="closeVersionModal()" class="text-gray-300 hover:text-gray-200">Cancel</button>
+                </form>
+            </div>
+        </div>
+
         <!-- Modal for PDF viewer -->
         <div id="pdfModal" class="modal hidden fixed inset-0 z-30 overflow-y-auto bg-gray-900 bg-opacity-75 flex items-center justify-center">
             <div class="bg-gray-800 rounded-lg shadow-xl sm:w-full sm:max-w-4xl p-6">
@@ -178,6 +204,8 @@
                                         <span class="text-sm text-gray-300">(Uploaded on: {{ $version->created_at->format('F j, Y') }})</span>
                                     </li>
                                 @endforeach
+                                <!-- Button to Upload New Version -->
+                                <button class="text-sm text-blue-400 hover:text-blue-500" onclick="openVersionModal({{ $article->id }})">Upload New Version</button>
                             </ul>
                         @else
                             <p class="text-gray-300">No versions available.</p>
@@ -308,6 +336,33 @@
     </div>
 
     <script>
+        // Show version history modal
+        function showVersionHistory(articleId) {
+            document.getElementById(`versionHistoryModal-${articleId}`).classList.remove('hidden');
+            document.getElementById('content').classList.add('blur-sm'); // Apply blur effect
+        }
+
+        // Close the version history modal
+        function closeModal(articleId) {
+            document.getElementById(`versionHistoryModal-${articleId}`).classList.add('hidden');
+            document.getElementById('content').classList.remove('blur-sm'); // Remove blur effect
+        }
+
+        function openVersionModal(articleId) {
+            document.getElementById('article_id').value = articleId; // Set the hidden input value
+
+            // Set the form action dynamically
+            const form = document.getElementById('uploadVersionForm');
+            form.action = `{{ url('research-articles/${articleId}/version') }}`; // Use articleId to create the URL
+
+            document.getElementById('versionModal').classList.remove('hidden'); // Show the modal
+        }
+
+        function closeVersionModal() {
+            document.getElementById('versionModal').classList.add('hidden'); // Hide the modal
+        }
+
+        // Show location input based on type
         function showLocationInput() {
             const locationType = document.getElementById("locationType").value;
             const locationInput = document.getElementById("locationInput");
@@ -321,44 +376,20 @@
                 location.required = true;
             }
         }
-    </script>
-    <script>
+
+        // Open PDF in modal
         function openPdfInModal(pdfUrl) {
-            // Set the iframe src to the PDF URL
             document.getElementById('pdfIframe').src = pdfUrl;
-
-            // Show the modal by removing the 'hidden' class
             document.getElementById('pdfModal').classList.remove('hidden');
-
-            // Apply the blur effect to the main content
-            document.getElementById('content').classList.add('blur-sm');
+            document.getElementById('content').classList.add('blur-sm'); // Apply blur effect
         }
 
+        // Close PDF modal
         function closePdfModal() {
-            // Hide the modal by adding the 'hidden' class
             document.getElementById('pdfModal').classList.add('hidden');
-
-            // Remove the blur effect from the main content
-            document.getElementById('content').classList.remove('blur-sm');
-
-            // Reset the iframe src to remove the PDF (optional)
-            document.getElementById('pdfIframe').src = '';
-        }
-
-        function showVersionHistory(articleId) {
-            // Show the modal by removing the 'hidden' class
-            document.getElementById('versionHistoryModal-' + articleId).classList.remove('hidden');
-
-            // Apply the blur effect to the main content
-            document.getElementById('content').classList.add('blur-sm');
-        }
-
-        function closeModal(articleId) {
-            // Hide the modal by adding the 'hidden' class
-            document.getElementById('versionHistoryModal-' + articleId).classList.add('hidden');
-
-            // Remove the blur effect from the main content
-            document.getElementById('content').classList.remove('blur-sm');
+            document.getElementById('content').classList.remove('blur-sm'); // Remove blur effect
+            document.getElementById('pdfIframe').src = ''; // Reset iframe src
         }
     </script>
+
 </x-app-layout>
