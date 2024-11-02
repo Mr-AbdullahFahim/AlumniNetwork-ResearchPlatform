@@ -9,6 +9,8 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AlumniProfileController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserController;
 
 // Home route
 Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -17,6 +19,8 @@ Route::get('/', [JobController::class, 'dashboard'])->middleware(['auth', 'verif
 Route::get('/jobs',[JobController::class,'index'])->name('jobs.index');
 Route::post('/jobs/store', [JobController::class, 'store'])->name('jobs.store');
 
+// Define the About page route
+Route::get('/about', [PageController::class, 'about'])->name('about');
 
 // Profile routes (authenticated users)
 Route::middleware('auth')->group(function () {
@@ -35,6 +39,12 @@ Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('lo
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{id}/follow', [UserController::class, 'follow'])->name('users.follow');
+    Route::post('/users/{id}/unfollow', [UserController::class, 'unfollow'])->name('users.unfollow');
+});
+
 // Admin Dashboard Routes (Role-based access)
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware('role:admin')  // Ensure this middleware is correctly configured
@@ -50,7 +60,9 @@ Route::get('/research-articles', [ResearchArticleController::class, 'index'])->n
 Route::post('/research-article', [ResearchArticleController::class, 'store'])->name('research-article.store');
 Route::get('/research-article/create', [ResearchArticleController::class, 'create'])->name('research-article.create');
 Route::get('/research-articles/{id}/versions', [ResearchArticleController::class, 'versionHistory'])->name('research.version_history');
-Route::post('/research-articles/{id}/new-version', [ResearchArticleController::class, 'uploadNewVersion'])->name('research-articles.upload-version');
+Route::post('/research-articles/{id}/version', [ResearchArticleController::class, 'uploadNewVersion'])->name('research-article.version.store'); // Updated route name
+
+
 
 // Admin Routes under prefix
 Route::prefix('admin')->group(function () {

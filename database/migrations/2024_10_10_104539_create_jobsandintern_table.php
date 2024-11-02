@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('description');  // Job or internship description
             $table->enum('type', ['job', 'internship']);  // Type (job or internship)
             $table->timestamp('posted_at');  // When the job was posted
+            $table->string('job_link')->nullable();  // Job link (nullable)
+            $table->string('company_email')->nullable();  // Company email (nullable)
             $table->timestamps();  // Created at and updated at
         });
     }

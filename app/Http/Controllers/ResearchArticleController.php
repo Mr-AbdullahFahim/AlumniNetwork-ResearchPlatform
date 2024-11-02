@@ -80,9 +80,11 @@ class ResearchArticleController extends Controller
     public function uploadNewVersion(Request $request, $articleId)
     {
         $request->validate(['file' => 'required|mimes:pdf|max:10000']);
+        
         $article = ResearchArticle::findOrFail($articleId);
-        $newVersion = $article->versions()->max('version') + 1;
+        $newVersion = $article->versions()->max('version') + 1; // Increment version number
 
+        // File upload logic
         $file = $request->file('file');
         $fileName = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->storeAs('public/research_articles', $fileName);
@@ -95,4 +97,5 @@ class ResearchArticleController extends Controller
 
         return redirect()->back()->with('success', 'New version uploaded successfully!');
     }
+
 }

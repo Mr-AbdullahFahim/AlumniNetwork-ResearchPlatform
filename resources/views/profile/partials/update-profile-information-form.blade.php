@@ -13,10 +13,9 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
-
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
@@ -45,6 +44,19 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <!-- Profile Image Upload -->
+        <div>
+            <x-input-label for="profile_image" :value="__('Profile Image')" />
+            <input id="profile_image" name="profile_image" type="file" class="mt-1 block w-full text-white bg-gray-800 rounded border border-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+            <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
+
+            <!-- Display current profile image or default profile image if not available -->
+            <div class="mt-4">
+                <img src="{{ $user->profile_image ? asset('storage/profile_images/' . $user->profile_image) : asset('default-profile.png') }}" 
+                     alt="Profile Image" class="w-24 h-24 rounded-full object-cover">
+            </div>
         </div>
 
         <div class="flex items-center gap-4">

@@ -1,10 +1,24 @@
 <x-app-layout>
-    <div class="container mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+    <div class="container mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden" style="max-width: 900px;"> <!-- Fixed width applied here -->
         <!-- Profile Section -->
         <div class="mb-8">
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center relative group"> <!-- Add 'relative' and 'group' classes -->
                 <div class="text-center mb-6">
-                    <img src="https://via.placeholder.com/120" alt="Profile Picture" class="rounded-full mx-auto mb-4">
+                    <div class="w-36 h-36 rounded-full overflow-hidden cursor-pointer" onclick="uploadImg()">
+                        <img src="../../../storage/{{$user->profile_image}}" alt="Profile Picture" 
+                            class="w-full h-full object-cover mx-auto mb-4 hover:opacity-75 transition-opacity duration-300">
+                    </div>
+
+                    <form action="{{route('profile.update')}}" method="post" enctype="multipart/form-data" class="hidden">
+                        @csrf
+                        @method('PATCH')
+                        <input type="file" id="profile_image" name="profile_image" class="hidden" onchange="uploadProfilePic()">
+                        <input type="submit" id="profileUpdate" value="submit" class="hidden">
+                    </form>
+                        @if ($errors->has('profile_image'))
+                            <div class="text-red-500">{{ $errors->first('profile_image') }}</div>
+                        @endif
+                     <!-- Hidden input for file upload -->
                     <h2 class="text-2xl font-semibold">{{ ucfirst($user->name) }}</h2>
                     <p class="text-gray-400 mt-2">{{ $user->profession }}</p>
                 </div>
@@ -12,6 +26,11 @@
                 <p class="text-gray-300 mt-2 text-center px-6 md:px-24">
                     {{ $user->bio }}
                 </p>
+
+                <!-- Feedback for adding profile picture -->
+                <div class="absolute bottom-0 mb-2 text-gray-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to upload a profile picture
+                </div>
 
                 <!-- Social Links -->
                 <div class="mt-4 flex space-x-4">
@@ -29,8 +48,21 @@
             </div>
         </div>
 
+        <script>
+            const profile_image = document.getElementById('profile_image');
+            const profileUpdate = document.getElementById('profileUpdate');
+
+            function uploadImg() {
+                profile_image.click();  // Opens the file picker
+            }
+
+            function uploadProfilePic() {
+                profileUpdate.click();  // Submits the form
+            }
+        </script>
+
         <!-- Jobs Section -->
-         @if($user->role!='user')
+        @if($user->role!='user')
         <div class="mb-8">
             <h3 class="text-xl font-semibold mb-4">Jobs and Internships</h3>
 
@@ -66,6 +98,8 @@
                         <p class="text-gray-300 mt-2">{{ $job->description }}</p>
                         <p class="text-sm text-gray-500 mt-2">Job Type: {{ ucfirst($job->type) }}</p>
                         <p class="text-sm text-gray-500 mt-2">Posted on: {{ $job->posted_at->format('F j, Y') }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Company Email: {{ $job->company_email }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Job Link: <a href="{{ $job->job_link }}" target="_blank" class="text-blue-400 hover:underline">View Job</a></p>
 
                         <button 
                             class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
@@ -115,6 +149,32 @@
             </div>
         </div>
 
+        <!-- Modal for Uploading New Version -->
+        <div id="versionModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex items-center justify-center">
+            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3">
+                <h3 class="text-xl font-semibold text-gray-200">Upload New Version</h3>
+                <form id="uploadVersionForm" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="article_id" id="article_id" value="">
+
+                    <!-- Version Number Field -->
+                    <div class="mb-4">
+                        <label for="version" class="block text-gray-300">Version</label>
+                        <input type="text" id="version" name="version" class="w-full px-4 py-2 bg-gray-800 text-white rounded border border-gray-600" placeholder="Enter version number">
+                    </div>
+
+                    <!-- PDF File Upload -->
+                    <div class="mb-4">
+                        <label for="file" class="block text-gray-300">Upload PDF</label>
+                        <input type="file" id="file" name="file" class="w-full bg-gray-800 text-white rounded border border-gray-600">
+                    </div>
+
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">Submit</button>
+                    <button type="button" onclick="closeVersionModal()" class="text-gray-300 hover:text-gray-200">Cancel</button>
+                </form>
+            </div>
+        </div>
+
         <!-- Modal for PDF viewer -->
         <div id="pdfModal" class="modal hidden fixed inset-0 z-30 overflow-y-auto bg-gray-900 bg-opacity-75 flex items-center justify-center">
             <div class="bg-gray-800 rounded-lg shadow-xl sm:w-full sm:max-w-4xl p-6">
@@ -131,7 +191,7 @@
         <!-- Modal for version history -->
         @foreach ($researchArticles as $article)
             <div id="versionHistoryModal-{{ $article->id }}" class="modal hidden fixed z-20 inset-0 overflow-y-auto bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                <div class="bg-gray-900 rounded-lg shadow-xl transform transition-all sm:w-full sm:max-w-lg p-6">
+                <div class="bg-gray-900 rounded-lg shadow-xl transform transition-all sm:w-full sm:max-w-lg p-6 overflow-y-auto max-h-screen">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xl font-bold text-white">Version History - {{ $article->title }}</h2>
                         <button onclick="closeModal({{ $article->id }})" class="text-red-600">Close</button>
@@ -146,6 +206,8 @@
                                         <span class="text-sm text-gray-300">(Uploaded on: {{ $version->created_at->format('F j, Y') }})</span>
                                     </li>
                                 @endforeach
+                                <!-- Button to Upload New Version -->
+                                <button class="text-sm text-blue-400 hover:text-blue-500" onclick="openVersionModal({{ $article->id }})">Upload New Version</button>
                             </ul>
                         @else
                             <p class="text-gray-300">No versions available.</p>
@@ -165,7 +227,7 @@
         <!-- Job Modal -->
         @if($user->role!='user')
         <div id="jobModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-80">
-            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3">
+            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3 overflow-y-auto max-h-screen">
                 <h3 class="text-xl font-semibold mb-4">Add Job/Internship</h3>
                 <form method="POST" action="{{ route('jobs.store') }}">
                     @csrf
@@ -176,6 +238,14 @@
                     <div class="mb-4">
                         <label for="company" class="block text-gray-300">Company</label>
                         <input type="text" id="company" name="company" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter company name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="company-email" class="block text-gray-300">Company Email (if available)</label>
+                        <input type="email" id="company-email" name="company_email" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter company email">
+                    </div>
+                    <div class="mb-4">
+                        <label for="job-link" class="block text-gray-300">Job Link</label>
+                        <input type="url" id="job-link" name="job_link" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter job link" required>
                     </div>
                     <div class="mb-4">
                         <label for="locationType" class="block text-gray-300">Location Type</label>
@@ -276,6 +346,33 @@
     </div>
 
     <script>
+        // Show version history modal
+        function showVersionHistory(articleId) {
+            document.getElementById(`versionHistoryModal-${articleId}`).classList.remove('hidden');
+            document.getElementById('content').classList.add('blur-sm'); // Apply blur effect
+        }
+
+        // Close the version history modal
+        function closeModal(articleId) {
+            document.getElementById(`versionHistoryModal-${articleId}`).classList.add('hidden');
+            document.getElementById('content').classList.remove('blur-sm'); // Remove blur effect
+        }
+
+        function openVersionModal(articleId) {
+            document.getElementById('article_id').value = articleId; // Set the hidden input value
+
+            // Set the form action dynamically
+            const form = document.getElementById('uploadVersionForm');
+            form.action = `{{ url('research-articles/${articleId}/version') }}`; // Use articleId to create the URL
+
+            document.getElementById('versionModal').classList.remove('hidden'); // Show the modal
+        }
+
+        function closeVersionModal() {
+            document.getElementById('versionModal').classList.add('hidden'); // Hide the modal
+        }
+
+        // Show location input based on type
         function showLocationInput() {
             const locationType = document.getElementById("locationType").value;
             const locationInput = document.getElementById("locationInput");
@@ -289,44 +386,20 @@
                 location.required = true;
             }
         }
-    </script>
-    <script>
+
+        // Open PDF in modal
         function openPdfInModal(pdfUrl) {
-            // Set the iframe src to the PDF URL
             document.getElementById('pdfIframe').src = pdfUrl;
-
-            // Show the modal by removing the 'hidden' class
             document.getElementById('pdfModal').classList.remove('hidden');
-
-            // Apply the blur effect to the main content
-            document.getElementById('content').classList.add('blur-sm');
+            document.getElementById('content').classList.add('blur-sm'); // Apply blur effect
         }
 
+        // Close PDF modal
         function closePdfModal() {
-            // Hide the modal by adding the 'hidden' class
             document.getElementById('pdfModal').classList.add('hidden');
-
-            // Remove the blur effect from the main content
-            document.getElementById('content').classList.remove('blur-sm');
-
-            // Reset the iframe src to remove the PDF (optional)
-            document.getElementById('pdfIframe').src = '';
-        }
-
-        function showVersionHistory(articleId) {
-            // Show the modal by removing the 'hidden' class
-            document.getElementById('versionHistoryModal-' + articleId).classList.remove('hidden');
-
-            // Apply the blur effect to the main content
-            document.getElementById('content').classList.add('blur-sm');
-        }
-
-        function closeModal(articleId) {
-            // Hide the modal by adding the 'hidden' class
-            document.getElementById('versionHistoryModal-' + articleId).classList.add('hidden');
-
-            // Remove the blur effect from the main content
-            document.getElementById('content').classList.remove('blur-sm');
+            document.getElementById('content').classList.remove('blur-sm'); // Remove blur effect
+            document.getElementById('pdfIframe').src = ''; // Reset iframe src
         }
     </script>
+
 </x-app-layout>

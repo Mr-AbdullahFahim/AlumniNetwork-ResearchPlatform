@@ -21,6 +21,12 @@
                     <x-nav-link :href="route('research.index')" :active="request()->routeIs('research.index')">
                         {{ __('Research Articles') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                        {{ __('Network') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('about')" :active="request()->routeIs('about')">
+                        {{ __('About') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -82,6 +88,15 @@
             <x-responsive-nav-link :href="route('jobs.index')" :active="request()->routeIs('jobs.index')">
                 {{ __('Jobs') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('research.index')" :active="request()->routeIs('research.index')">
+                {{ __('Research Articles') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                {{ __('Network') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')">
+                {{ __('About') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -94,6 +109,9 @@
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('profile.edit')">
+                    {{ __('Settings') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
