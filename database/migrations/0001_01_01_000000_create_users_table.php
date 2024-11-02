@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->text('bio')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('profile_image')->nullable();
             $table->string('password');
+            $table->string('google_scholar')->nullable();
+            $table->string('github')->nullable();
             $table->string('role')->default('user');
             $table->string('status')->default('pending');
             $table->boolean('is_alumni')->default(false); 

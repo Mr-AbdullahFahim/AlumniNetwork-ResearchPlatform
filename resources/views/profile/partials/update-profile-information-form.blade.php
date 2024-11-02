@@ -46,6 +46,12 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="bio" :value="__('Bio')" />
+            <textarea id="bio" name="bio" rows="4" class="mt-1 block w-full text-gray-700 dark:text-gray-200 bg-gray-800 dark:bg-gray-700 border border-gray-600 rounded-md focus:border-indigo-500 focus:ring-indigo-500" placeholder="Write a short bio about yourself">{{ old('bio', $user->bio) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
+
         <!-- Profile Image Upload -->
         <div>
             <x-input-label for="profile_image" :value="__('Profile Image')" />
@@ -58,6 +64,29 @@
                      alt="Profile Image" class="w-24 h-24 rounded-full object-cover">
             </div>
         </div>
+
+        <div class="mt-4">
+            <button type="button" onclick="toggleLinkField('googleScholarField')" class="bg-blue-600 text-white px-3 py-1 rounded">Add Google Scholar</button>
+            <div id="googleScholarField" class="hidden mt-2">
+                <label class="block text-gray-300">Google Scholar URL</label>
+                <input type="url" name="google_scholar" value="{{ $user->google_scholar }}" class="w-full px-4 py-2 border rounded bg-gray-800 text-white">
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="button" onclick="toggleLinkField('githubField')" class="bg-blue-600 text-white px-3 py-1 rounded">Add GitHub</button>
+            <div id="githubField" class="hidden mt-2">
+                <label class="block text-gray-300">GitHub URL</label>
+                <input type="url" name="github" value="{{ $user->github }}" class="w-full px-4 py-2 border rounded bg-gray-800 text-white">
+            </div>
+        </div>
+
+        <script>
+            function toggleLinkField(fieldId) {
+                const field = document.getElementById(fieldId);
+                field.classList.toggle('hidden');
+            }
+        </script>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

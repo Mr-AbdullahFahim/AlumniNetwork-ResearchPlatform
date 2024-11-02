@@ -1,12 +1,17 @@
 <x-app-layout>
-    <div class="container mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden" style="max-width: 900px;"> <!-- Fixed width applied here -->
+    <div class="container mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden" style="max-width: 1200px;"> <!-- Fixed width applied here -->
         <!-- Profile Section -->
         <div class="mb-8">
             <div class="flex flex-col items-center relative group"> <!-- Add 'relative' and 'group' classes -->
                 <div class="text-center mb-6">
                     <div class="w-36 h-36 rounded-full overflow-hidden cursor-pointer" onclick="uploadImg()">
-                        <img src="../../../storage/{{$user->profile_image}}" alt="Profile Picture" 
-                            class="w-full h-full object-cover mx-auto mb-4 hover:opacity-75 transition-opacity duration-300">
+                        @if($user->profile_image)
+                            <img src="../../../storage/{{$user->profile_image}}" alt="Profile Picture" 
+                            class="w-full object-cover mx-auto hover:opacity-75 transition-opacity duration-300">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name=Default+User&background=random" alt="Profile Picture" 
+                            class="w-full object-cover mx-auto hover:opacity-75 transition-opacity duration-300">
+                        @endif
                     </div>
 
                     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6 hidden" enctype="multipart/form-data">
@@ -65,22 +70,17 @@
                     {{ $user->bio }}
                 </p>
 
-                <!-- Feedback for adding profile picture -->
-                <div class="absolute bottom-0 mb-2 text-gray-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Click to upload a profile picture
-                </div>
-
                 <!-- Social Links -->
                 <div class="mt-4 flex space-x-4">
                     @if($user->google_scholar)
-                    <a href="{{ $user->google_scholar }}" target="_blank" class="text-gray-400 hover:text-gray-200">
-                        <i class="fab fa-google-scholar text-2xl"></i>
-                    </a>
+                        <a href="{{ $user->google_scholar }}" target="_blank" class="text-gray-400 hover:text-gray-200">
+                            <i class="fab fa-google text-2xl"></i> <!-- Google Scholar icon -->
+                        </a>
                     @endif
                     @if($user->github)
-                    <a href="{{ $user->github }}" target="_blank" class="text-gray-400 hover:text-gray-200">
-                        <i class="fab fa-github text-2xl"></i>
-                    </a>
+                        <a href="{{ $user->github }}" target="_blank" class="text-gray-400 hover:text-gray-200">
+                            <i class="fab fa-github text-2xl"></i> <!-- GitHub icon -->
+                        </a>
                     @endif
                 </div>
             </div>
@@ -137,7 +137,9 @@
                         <p class="text-sm text-gray-500 mt-2">Job Type: {{ ucfirst($job->type) }}</p>
                         <p class="text-sm text-gray-500 mt-2">Posted on: {{ $job->posted_at->format('F j, Y') }}</p>
                         <p class="text-sm text-gray-500 mt-2">Company Email: {{ $job->company_email }}</p>
-                        <p class="text-sm text-gray-500 mt-2">Job Link: <a href="{{ $job->job_link }}" target="_blank" class="text-blue-400 hover:underline">View Job</a></p>
+                        <a href="{{ $job->job_link }}" target="_blank" class="inline-block bg-blue-500 text-white font-semibold mr-2 py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out">
+                            Apply<span class="fas fa-arrow-right ml-2"></span>
+                        </a>
 
                         <button 
                             class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
@@ -240,7 +242,7 @@
                             <ul>
                                 @foreach($article->versions as $version)
                                     <li class="mb-2">
-                                        <a onclick="openPdfInModal('{{ Storage::url($article->latestVersion->file_path) }}')" class="text-blue-400 hover:text-blue-500 cursor-pointer">Version {{ $version->version }}</a>
+                                        <a onclick="openPdfInModal('{{ Storage::url($version->file_path) }}')" class="text-blue-400 hover:text-blue-500 cursor-pointer">Version {{ $version->version }}</a>
                                         <span class="text-sm text-gray-300">(Uploaded on: {{ $version->created_at->format('F j, Y') }})</span>
                                     </li>
                                 @endforeach
@@ -265,7 +267,7 @@
         <!-- Job Modal -->
         @if($user->role!='user')
         <div id="jobModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-80">
-            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3 overflow-y-auto max-h-screen">
+            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3 h-5/6 overflow-y-auto max-h-screen">
                 <h3 class="text-xl font-semibold mb-4">Add Job/Internship</h3>
                 <form method="POST" action="{{ route('jobs.store') }}">
                     @csrf
@@ -307,6 +309,11 @@
                             <option value="job">Job</option>
                             <option value="internship">Internship</option>
                         </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="job-link" class="block text-gray-300">Job Apply Link</label>
+                        <p class="text-slate-600">Provide a web url or email to apply</p>
+                        <input type="text" id="job-link" name="job_link" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter job link" required>
                     </div>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
                     <button type="button" class="text-gray-300 hover:text-gray-200" onclick="document.getElementById('jobModal').classList.add('hidden')">Cancel</button>
