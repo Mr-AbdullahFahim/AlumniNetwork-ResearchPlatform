@@ -28,7 +28,7 @@
                 </p>
 
                 <!-- Feedback for adding profile picture -->
-                <div class="absolute bottom-0 mb-2 text-gray-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="absolute top-14 mb-2 text-gray-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     Click to upload a profile picture
                 </div>
 

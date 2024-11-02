@@ -51,6 +51,11 @@ class ProfileController extends Controller
             $user->profile_image = $path;
         }
 
+        // Update bio field if present in the request
+        if ($request->filled('bio')) {
+            $user->bio = $request->input('bio');
+        }
+
         // Reset email verification if email has changed
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
