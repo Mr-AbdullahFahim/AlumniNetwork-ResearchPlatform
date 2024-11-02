@@ -98,6 +98,8 @@
                         <p class="text-gray-300 mt-2">{{ $job->description }}</p>
                         <p class="text-sm text-gray-500 mt-2">Job Type: {{ ucfirst($job->type) }}</p>
                         <p class="text-sm text-gray-500 mt-2">Posted on: {{ $job->posted_at->format('F j, Y') }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Company Email: {{ $job->company_email }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Job Link: <a href="{{ $job->job_link }}" target="_blank" class="text-blue-400 hover:underline">View Job</a></p>
 
                         <button 
                             class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
@@ -189,7 +191,7 @@
         <!-- Modal for version history -->
         @foreach ($researchArticles as $article)
             <div id="versionHistoryModal-{{ $article->id }}" class="modal hidden fixed z-20 inset-0 overflow-y-auto bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                <div class="bg-gray-900 rounded-lg shadow-xl transform transition-all sm:w-full sm:max-w-lg p-6">
+                <div class="bg-gray-900 rounded-lg shadow-xl transform transition-all sm:w-full sm:max-w-lg p-6 overflow-y-auto max-h-screen">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xl font-bold text-white">Version History - {{ $article->title }}</h2>
                         <button onclick="closeModal({{ $article->id }})" class="text-red-600">Close</button>
@@ -225,7 +227,7 @@
         <!-- Job Modal -->
         @if($user->role!='user')
         <div id="jobModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-80">
-            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3">
+            <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3 overflow-y-auto max-h-screen">
                 <h3 class="text-xl font-semibold mb-4">Add Job/Internship</h3>
                 <form method="POST" action="{{ route('jobs.store') }}">
                     @csrf
@@ -236,6 +238,14 @@
                     <div class="mb-4">
                         <label for="company" class="block text-gray-300">Company</label>
                         <input type="text" id="company" name="company" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter company name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="company-email" class="block text-gray-300">Company Email (if available)</label>
+                        <input type="email" id="company-email" name="company_email" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter company email">
+                    </div>
+                    <div class="mb-4">
+                        <label for="job-link" class="block text-gray-300">Job Link</label>
+                        <input type="url" id="job-link" name="job_link" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter job link" required>
                     </div>
                     <div class="mb-4">
                         <label for="locationType" class="block text-gray-300">Location Type</label>
