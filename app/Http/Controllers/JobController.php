@@ -31,6 +31,8 @@ class JobController extends Controller
             'description' => 'required|string',
             'job_link' => 'nullable|string|max:255',
             'type' => 'required|in:job,internship',
+            'job_link' => 'nullable|url|max:255', // New field for job link
+            'company_email' => 'nullable|email|max:255', // New field for company email
         ]);
 
         $emailPattern = '/^[\w\.\-]+@[\w\.\-]+\.[a-zA-Z]{2,7}$/';
@@ -60,6 +62,8 @@ class JobController extends Controller
             'type' => $request->input('type'),
             'job_link' => $url,
             'posted_at' => now(), // Assuming you want to set the current timestamp as the posted date
+            'job_link' => $request->input('job_link'), // Save the job link if provided
+            'company_email' => $request->input('company_email'), // Save the company email if provided
         ]);
 
         // Redirect or return a success response

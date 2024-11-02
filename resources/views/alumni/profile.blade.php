@@ -280,6 +280,14 @@
                         <input type="text" id="company" name="company" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter company name" required>
                     </div>
                     <div class="mb-4">
+                        <label for="company-email" class="block text-gray-300">Company Email (if available)</label>
+                        <input type="email" id="company-email" name="company_email" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter company email">
+                    </div>
+                    <div class="mb-4">
+                        <label for="job-link" class="block text-gray-300">Job Link</label>
+                        <input type="url" id="job-link" name="job_link" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" placeholder="Enter job link" required>
+                    </div>
+                    <div class="mb-4">
                         <label for="locationType" class="block text-gray-300">Location Type</label>
                         <select id="locationType" onchange="showLocationInput()" name="locationType" class="w-full px-4 py-2 border border-gray-600 rounded bg-gray-800 text-white" required>
                             <option value="Onsite" selected="selected">Onsite</option>
