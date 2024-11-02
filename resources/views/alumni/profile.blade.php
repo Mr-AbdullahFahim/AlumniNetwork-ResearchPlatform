@@ -9,11 +9,49 @@
                             class="w-full h-full object-cover mx-auto mb-4 hover:opacity-75 transition-opacity duration-300">
                     </div>
 
-                    <form action="{{route('profile.update')}}" method="post" enctype="multipart/form-data" class="hidden">
+                    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6 hidden" enctype="multipart/form-data">
                         @csrf
-                        @method('PATCH')
-                        <input type="file" id="profile_image" name="profile_image" class="hidden" onchange="uploadProfilePic()">
-                        <input type="submit" id="profileUpdate" value="submit" class="hidden">
+                        @method('patch')
+                        <div>
+                            <x-input-label for="name" :value="__('Name')" />
+                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="email" :value="__('Email')" />
+                            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+                            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+
+                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+                                <div>
+                                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
+                                        {{ __('Your email address is unverified.') }}
+
+                                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                                            {{ __('Click here to re-send the verification email.') }}
+                                        </button>
+                                    </p>
+
+                                    @if (session('status') === 'verification-link-sent')
+                                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+                                            {{ __('A new verification link has been sent to your email address.') }}
+                                        </p>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Profile Image Upload -->
+                        <div>
+                            <x-input-label for="profile_image" :value="__('Profile Image')" />
+                            <input id="profile_image" name="profile_image" type="file" class="mt-1 block w-full text-white bg-gray-800 rounded border border-gray-600 focus:border-indigo-500 focus:ring-indigo-500" oninput="uploadProfilePic()">
+                            <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <x-primary-button id="profileUpdate">{{ __('Save') }}</x-primary-button>
+                        </div>
                     </form>
                         @if ($errors->has('profile_image'))
                             <div class="text-red-500">{{ $errors->first('profile_image') }}</div>

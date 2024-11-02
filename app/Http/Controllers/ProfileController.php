@@ -59,7 +59,7 @@ class ProfileController extends Controller
         // Save the updated user information
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->back()->with('status', 'profile-updated');
     }
 
     /**
