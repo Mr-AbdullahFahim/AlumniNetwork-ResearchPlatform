@@ -8,10 +8,10 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Display user's profile image or default profile image -->
-            <div class="text-center mb-4">
+            <div class="mb-4 w-36 h-36 overflow-hidden mx-auto rounded-full">
                 @if(Auth::check() && Auth::user()->profile_image)
-                    <img src="{{ asset(Auth::user()->profile_image ? 'storage/profile_images/' . Auth::user()->profile_image : 'default-profile.png') }}" 
-                        alt="Profile Image" class="w-24 h-24 rounded-full mx-auto">
+                    <img src="{{ asset(Auth::user()->profile_image ? '../../../storage/' . Auth::user()->profile_image : 'default-profile.png') }}" 
+                        alt="Profile Image" class="w-full h-full object-cover mx-auto mb-4 hover:opacity-75 transition-opacity duration-300">
                 @endif
             </div>
 

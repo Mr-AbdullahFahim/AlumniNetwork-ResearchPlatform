@@ -17,12 +17,6 @@ return new class extends Migration
             $table->foreignId('followee_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('profile_image')->nullable();
-            $table->text('description')->nullable();
-            $table->boolean('is_alumni')->default(false);
-        });
     }
 
     /**

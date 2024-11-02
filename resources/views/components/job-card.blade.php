@@ -28,7 +28,9 @@
         <p class="text-gray-300 mt-2">{{ $job->description }}</p>
         <p class="text-sm text-gray-500 mt-2">Job Type: {{ ucfirst($job->type) }}</p>
         <p class="text-sm text-gray-500 mt-2">Posted on: {{ $job->posted_at->format('F j, Y') }}</p>
-
+        <a href="{{ $job->job_link }}" target="_blank" class="inline-block bg-blue-500 text-white font-semibold mr-2 py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out">
+            Apply<span class="fas fa-arrow-right ml-2"></span>
+        </a>
         <button 
             class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
             onclick="document.getElementById('jobDetailsModal{{ $job->id }}').classList.add('hidden')">

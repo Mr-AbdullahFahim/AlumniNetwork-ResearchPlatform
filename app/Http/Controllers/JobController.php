@@ -29,8 +29,22 @@ class JobController extends Controller
             'locationType' => 'required|in:Onsite,Remote,Hybrid',
             'location' => 'nullable|string|max:255',
             'description' => 'required|string',
+            'job_link' => 'nullable|string|max:255',
             'type' => 'required|in:job,internship',
         ]);
+
+        $emailPattern = '/^[\w\.\-]+@[\w\.\-]+\.[a-zA-Z]{2,7}$/';
+
+        // Regular expression for web URLs (supports http, https, www)
+        $urlPattern = '/^(https?:\/\/|www\.)[a-zA-Z0-9\-\._~:\/?#\[\]@!$&\'()*+,;=%]+$/';
+
+        $url="";
+
+        if (preg_match($emailPattern, $request->input('job_link'))) {
+            $url="mailto::".($request->input('job_link'));
+        } elseif (preg_match($urlPattern, $request->input('job_link'))) {
+            $url=$request->input('job_link');
+        }
 
         // Handle the special case of 'Remote' where location is not required
         $location = $request->input('locationType') === 'Remote' ? null : $request->input('location');
@@ -44,6 +58,7 @@ class JobController extends Controller
             'location' => $location, // Save location only if provided
             'description' => $request->input('description'),
             'type' => $request->input('type'),
+            'job_link' => $url,
             'posted_at' => now(), // Assuming you want to set the current timestamp as the posted date
         ]);
 

@@ -60,7 +60,9 @@ Route::get('/research-articles', [ResearchArticleController::class, 'index'])->n
 Route::post('/research-article', [ResearchArticleController::class, 'store'])->name('research-article.store');
 Route::get('/research-article/create', [ResearchArticleController::class, 'create'])->name('research-article.create');
 Route::get('/research-articles/{id}/versions', [ResearchArticleController::class, 'versionHistory'])->name('research.version_history');
-Route::post('/research-articles/{id}/new-version', [ResearchArticleController::class, 'uploadNewVersion'])->name('research-articles.upload-version');
+Route::post('/research-articles/{id}/version', [ResearchArticleController::class, 'uploadNewVersion'])->name('research-article.version.store'); // Updated route name
+
+
 
 // Admin Routes under prefix
 Route::prefix('admin')->group(function () {
