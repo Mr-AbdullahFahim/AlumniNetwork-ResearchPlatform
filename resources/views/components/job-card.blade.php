@@ -22,10 +22,16 @@
 
 <!-- Job Details Modal -->
 <div id="jobDetailsModal{{ $job->id }}" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-80">
-    <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3">
-        <h3 class="text-2xl font-semibold text-white">{{ $job->title }}</h3>
-        <p class="text-gray-400">{{ $job->company }} - {{ $job->location }}</p>
-        <p class="text-gray-300 mt-2">{{ $job->description }}</p>
+    <div class="bg-gray-900 p-6 overflow-y-auto overflow-hidden h-4/5 rounded-lg shadow-lg w-1/3">
+        <div class="sticky top-0 relative bg-gray-900 pt-6 pb-3 -translate-y-9">
+            <button class="absolute top-8 right-2 text-gray-500 hover:text-gray-700 focus:outline-none" onclick="document.getElementById('jobDetailsModal{{ $job->id }}').classList.add('hidden')">
+                <!-- SVG X icon -->
+                <span class="fas fa-times fa-xl ml-2"></span>
+            </button>
+            <h3 class="text-2xl font-semibold text-white">{{ $job->title }}</h3>
+            <p class="text-gray-400">{{ $job->company }} - {{ $job->location }}</p>
+        </div>
+        <p class="text-gray-300 mt-2 text-justify">{{ $job->description }}</p>
         <p class="text-sm text-gray-500 mt-2">Job Type: {{ ucfirst($job->type) }}</p>
         <p class="text-sm text-gray-500 mt-2">Posted on: {{ $job->posted_at->format('F j, Y') }}</p>
         <a href="{{ $job->job_link }}" target="_blank" class="inline-block bg-blue-500 text-white font-semibold mr-2 py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out">

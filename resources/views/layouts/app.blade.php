@@ -68,8 +68,8 @@
                         <!-- Contact and Social Media Section -->
                         <div>
                             <h3 class="text-xl font-bold text-gray-100">Connect with Us</h3>
-                            <p class="mt-4 text-gray-400">Email us at: <a href="mailto:info@example.com" class="text-indigo-400 hover:text-indigo-300">info@example.com</a></p>
-                            <p class="mt-2 text-gray-400">Call us: <span class="text-gray-100">+123 456 7890</span></p>
+                            <p class="mt-4 text-gray-400">Email us at: <a href="mailto:info@example.com" class="text-indigo-400 hover:text-indigo-300">dcs@univ.jfn.ac.lk</a></p>
+                            <p class="mt-2 text-gray-400">Call us: <span class="text-gray-100">021 221 8194</span></p>
                             <div class="flex mt-6 space-x-6">
                                 <a href="#" class="text-gray-400 hover:text-indigo-300 transition"><i class="fab fa-linkedin fa-lg"></i></a>
                                 <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-facebook fa-lg"></i></a>
