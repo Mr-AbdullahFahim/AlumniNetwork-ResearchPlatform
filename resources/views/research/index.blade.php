@@ -56,7 +56,7 @@
                         <ul>
                             @foreach($article->versions as $version)
                                 <li class="mb-2">
-                                    <a onclick="openPdfInModal('{{ Storage::url($article->latestVersion->file_path) }}')" class="text-blue-400 hover:text-blue-500 cursor-pointer">Version {{ $version->version }}</a>
+                                    <a onclick="openPdfInModal('{{ Storage::url($version->file_path) }}')" class="text-blue-400 hover:text-blue-500 cursor-pointer">Version {{ $version->version }}</a>
                                     <span class="text-sm text-gray-300">(Uploaded on: {{ $version->created_at->format('F j, Y') }})</span>
                                 </li>
                             @endforeach
