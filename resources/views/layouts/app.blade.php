@@ -32,7 +32,7 @@
 
             <!-- Page Content -->
             @if(!\Illuminate\Support\Str::startsWith(Request::path(), 'chatify'))
-                <a id="openChatButton" class="fixed bottom-5 right-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-full shadow-lg flex items-center space-x-2" href="chatify">
+                <a id="openChatButton" class="fixed bottom-5 right-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-full shadow-lg flex items-center space-x-2" href="{{route('chatify')}}">
                     <i class="fas fa-comment-dots"></i>
                     <span>Chat</span>
                 </a>
