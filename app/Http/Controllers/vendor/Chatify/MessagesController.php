@@ -62,7 +62,7 @@ class MessagesController extends Controller
         $favorite = Chatify::inFavorite($request['id']);
         $fetch = User::where('id', $request['id'])->first();
         if($fetch){
-            $userAvatar = Chatify::getUserWithAvatar($fetch)->avatar;
+            $userAvatar = Chatify::getUserWithAvatar($fetch)->profile_image;
         }
         return Response::json([
             'favorite' => $favorite,
@@ -224,7 +224,7 @@ class MessagesController extends Controller
         $users = Message::join('users', function ($join) {
             $join->on('ch_messages.from_id', '=', 'users.id')
                 ->orOn('ch_messages.to_id', '=', 'users.id');
-        });
+        })->select('users.*')->distinct()->paginate(10);
 
 
         $usersList = $users->items();

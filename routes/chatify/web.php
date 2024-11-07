@@ -53,7 +53,7 @@ Route::get('/getContacts', 'MessagesController@getContacts')->name('contacts.get
 /**
  * Update contact item data
  */
-Route::post('/updateContacts', 'MessagesController@updateContactItem')->name('contacts.update');
+// Route::post('/updateContacts', 'MessagesController@updateContactItem')->name('contacts.update');
 
 
 /**
