@@ -5,13 +5,7 @@
             <div class="flex flex-col items-center relative group"> <!-- Add 'relative' and 'group' classes -->
                 <div class="text-center mb-6">
                     <div class="w-36 h-36 rounded-full overflow-hidden cursor-pointer" onclick="uploadImg()">
-                        @if($user->profile_image)
-                            <img src="../../../storage/{{$user->profile_image}}" alt="Profile Picture" 
-                            class="w-full object-cover mx-auto hover:opacity-75 transition-opacity duration-300">
-                        @else
-                            <img src="https://ui-avatars.com/api/?name=Default+User&background=random" alt="Profile Picture" 
-                            class="w-full object-cover mx-auto hover:opacity-75 transition-opacity duration-300">
-                        @endif
+                        <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('profileDefault.png') }}" alt="{{ $user->name }}" class="w-full object-cover mx-auto hover:opacity-75 transition-opacity duration-300">
                     </div>
 
                     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6 hidden" enctype="multipart/form-data">

@@ -1,6 +1,6 @@
-<x-app-layout class="my-8">
+<x-app-layout class="my-8" >
     @include('Chatify::layouts.headLinks')
-    <div class="messenger">
+    <div class="messenger" style="height:92vh;">
         {{-- ----------------------Users/Groups lists side---------------------- --}}
         <div class="messenger-listView {{ !!$id ? 'conversation-active' : '' }}">
             {{-- Header and search bar --}}
@@ -49,7 +49,7 @@
         </div>
 
         {{-- ----------------------Messaging side---------------------- --}}
-        <div class="messenger-messagingView">
+        <div class="messenger-messagingView" style="overflow:hidden;">
             {{-- header title [conversation name] amd buttons --}}
             <div class="m-header m-header-messaging">
                 <nav class="chatify-d-flex chatify-justify-content-between chatify-align-items-center">

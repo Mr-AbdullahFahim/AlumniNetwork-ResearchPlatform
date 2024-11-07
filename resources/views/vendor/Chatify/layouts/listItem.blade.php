@@ -31,7 +31,7 @@ $lastMessageBody = strlen($lastMessageBody) > 30 ? mb_substr($lastMessageBody, 0
                 <span class="activeStatus"></span>
             @endif
         <div class="avatar av-m"
-        style="background-image: url('../../../../storage/{{$user->profile_image}}');">
+        style="background-image: url('{{ $user->profile_image ? asset('../../../../storage/' . $user->profile_image) : asset('profileDefault.png') }}');">
         </div>
         </td>
         {{-- center side --}}

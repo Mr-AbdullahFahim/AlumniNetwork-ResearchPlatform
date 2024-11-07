@@ -16,7 +16,7 @@
 }
 .messenger-search[type="text"] {
     background: var(--secondary-bg-color);
-    color: #333;
+    color: #e8e8e8;
 }
 .messenger-listView {
     background: var(--primary-bg-color);

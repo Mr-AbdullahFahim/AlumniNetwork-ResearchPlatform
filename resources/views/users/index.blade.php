@@ -27,7 +27,7 @@
             @foreach($users as $user)
                 @if($user->id!=$me->id && $user->role!='admin')
                     <div class="bg-gray-700 p-6 rounded-lg text-center shadow-md">
-                    <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('default-profile.png') }}" alt="{{ $user->name }}" class="w-24 h-24 mx-auto rounded-full mb-4 object-cover">
+                    <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('profileDefault.png') }}" alt="{{ $user->name }}" class="w-24 h-24 mx-auto rounded-full mb-4 object-cover">
                         <h3 class="text-xl font-semibold text-white">{{ $user->name }}</h3>
                         <p class="text-indigo-400">{{ $user->email }}</p>
                         <p class="text-gray-300 mt-2">{{ $user->description ?? 'No description provided.' }}</p>
