@@ -47,6 +47,18 @@
         </div>
 
         <div>
+            <x-input-label for="nic" :value="__('NIC')" />
+            <x-text-input id="nic" name="nic" type="text" class="mt-1 block w-full" :value="old('nic', $user->nic ?? '')" required autocomplete="nic" />
+            <x-input-error class="mt-2" :messages="$errors->get('nic')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="indexNo" :value="__('Index Number')" />
+            <x-text-input id="indexNo" name="indexNo" type="text" class="mt-1 block w-full" :value="old('indexNo', $user->indexNo ?? '')" autocomplete="indexNo" />
+            <x-input-error class="mt-2" :messages="$errors->get('indexNo')" />
+        </div>
+
+        <div>
             <x-input-label for="bio" :value="__('Bio')" />
             <textarea id="bio" name="bio" rows="4" class="mt-1 block w-full text-gray-700 dark:text-gray-200 bg-gray-800 dark:bg-gray-700 border border-gray-600 rounded-md focus:border-indigo-500 focus:ring-indigo-500" placeholder="Write a short bio about yourself">{{ old('bio', $user->bio) }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('bio')" />

@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('github')->nullable();
             $table->string('role')->default('user');
             $table->string('status')->default('pending');
-            $table->boolean('is_alumni')->default(false); 
+            $table->string('nic')->unique()->nullable();
+            $table->string('indexNo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

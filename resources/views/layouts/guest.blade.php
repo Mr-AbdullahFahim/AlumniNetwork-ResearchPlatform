@@ -18,7 +18,8 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <!-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> -->
+                    <img src="https://i.ibb.co/Pzqqywg/UOJ-AR-Platform2-removebg-preview.png" alt="AR Logo" class="w-24 h-24 object-contain rounded-md shadow-md">
                 </a>
             </div>
 

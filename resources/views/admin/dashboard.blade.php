@@ -1,119 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-
-    <!-- Link to the compiled CSS file -->
-    <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
-
-
-    <!-- Add Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    
-</head>
-<body>
+<x-app-layout>
+<div class="flex h-screen bg-gray-900 text-white">
     <!-- Sidebar -->
-    @include('admin.partials.sidebar')
+    <div class="w-64 bg-gray-800 p-4">
+        @include('admin.partials.sidebar')
+    </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="dashboard-header">
-            <h2>Admin Dashboard</h2>
-            <div class="icon-bar">
-                <a href="{{ route('admin.notifications') }}" title="Notifications">
-                    <i class="fas fa-bell fa-lg"></i>
-                    <span class="badge">{{ $pendingRequestsCount }}</span>
-                </a>
-                <a href="{{ route('admin.inbox') }}" title="Inbox">
-                    <i class="fas fa-envelope fa-lg"></i>
-                </a>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ Auth::user()->name }}
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Settings</a></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</a>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Main Content Area -->
+    <div class="flex-1 p-6 bg-gray-900 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-800 scrollbar-rounded-lg">
+        <!-- Welcome Section -->
+        <div class="w-4/5">
+            <h4 class="my-2 text-xl">Welcome, Admin!</h4>
+            <h2 class="text-7xl font-extrabold">Admin Dashboard</h2>
+            <p class="w-4/5 my-3 text-xl font-thin">
+                <i>Manage user requests, monitor activity, and ensure a smooth experience across the platform.</i>
+            </p>
         </div>
 
         <!-- Stats Section -->
-        <div class="stats">
-            <div class="stat-box">
-                <h3>Total Users</h3>
-                <p>{{ $totalUsers }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+            <!-- Total Users -->
+            <div class="bg-white text-gray-800 p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold">Total Users</h3>
+                <p class="text-4xl font-bold">{{ $totalUsers }}</p>
             </div>
-            <div class="stat-box">
-                <h3>Approved Users</h3>
-                <p>{{ $approvedUsers }}</p>
+            <!-- Approved Users -->
+            <div class="bg-white text-gray-800 p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold">Approved Users</h3>
+                <p class="text-4xl font-bold">{{ $approvedUsers }}</p>
             </div>
-            <div class="stat-box">
-                <h3>Pending Requests</h3>
-                <p>{{ $pendingRequestsCount }}</p>
+            <!-- Pending Requests -->
+            <div class="bg-white text-gray-800 p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold">Pending Requests</h3>
+                <p class="text-4xl font-bold">{{ $pendingRequestsCount }}</p>
             </div>
-            <div class="stat-box">
-                <h3>Denied Requests</h3>
-                <p>{{ $deniedRequests }}</p>
+            <!-- Denied Requests -->
+            <div class="bg-white text-gray-800 p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold">Denied Requests</h3>
+                <p class="text-4xl font-bold">{{ $deniedRequests }}</p>
             </div>
         </div>
 
-        <!-- Pending Requests Section -->
-        <div class="pending-requests">
-            <h4>Pending User Requests <span class="badge">{{ $pendingRequestsCount }}</span></h4>
-            <table class="table table-striped table-dark">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Date Requested</th>
-                        <th>User Role</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($pendingRequests as $request)
-                        <tr>
-                            <td>{{ $request->name }}</td>
-                            <td>{{ $request->email }}</td>
-                            <td>{{ $request->created_at->format('d/m/Y') }}</td>
-                            <td>{{ $request->role }}</td>
-                            <td class="action-buttons">
-                                <form action="{{ route('admin.approve', $request->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success">Approve</button>
-                                </form>
-                                <form action="{{ route('admin.deny', $request->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">Deny</button>
-                                </form>
-                            </td>
+        <!-- Pending Requests Table -->
+        <div class="mt-12">
+            <h2 class="text-3xl font-extrabold text-white">Pending User Requests</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md mt-4">
+                <table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="bg-white text-gray-800 p-6 rounded-xl shadow-md">
+                            <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">Email</th>
+                            <th class="px-4 py-2">Date Requested</th>
+                            <th class="px-4 py-2">Role</th>
+                            <th class="px-4 py-2">Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($pendingRequests as $request)
+                            <tr class="bg-white text-black hover:bg-gray-100">
+                                <td class="px-4 py-2">{{ $request->name }}</td>
+                                <td class="px-4 py-2">{{ $request->email }}</td>
+                                <td class="px-4 py-2">{{ $request->created_at->format('d/m/Y') }}</td>
+                                <td class="px-4 py-2">{{ $request->role }}</td>
+                                <td class="px-4 py-2">
+                                    <div class="flex space-x-2">
+                                        <form action="{{ route('admin.approve', $request->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">Approve</button>
+                                        </form>
+                                        <form action="{{ route('admin.deny', $request->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Deny</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        &copy; 2024 Admin Dashboard - All Rights Reserved.
-    </footer>
-
-    <!-- Add Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+</x-app-layout>
