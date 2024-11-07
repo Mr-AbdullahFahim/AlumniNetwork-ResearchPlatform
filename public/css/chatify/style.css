@@ -20,19 +20,19 @@ body {
   --listView-header-height: 110px;
 
   /* Light theme variables */
-  --primary-bg-color: #fff;
-  --secondary-bg-color: #f7f7f7;
-  --border-color: #eee;
-  --messagingView-bg-color: #f6f7f9;
+  --primary-bg-color: #19222d;
+  --secondary-bg-color: #253142;
+  --border-color: #383e4a;
+  --messagingView-bg-color: #222d3c;
   --scrollbar-thumb-color: #cfcfcf;
   --modal-bg-color: #fff;
-  --send-input-icons-color: #4b4b4b;
-  --message-hint-bg-color: #ededed;
-  --message-hint-color: #4b4b4b;
-  --message-card-color: #fff;
+  --send-input-icons-color: #919191;
+  --message-hint-bg-color: #35465e;
+  --message-hint-color: #c9c8c8;
+  --message-card-color: #6a707e;
 
   /* Dark theme variables */
-  --dark-primary-bg-color: #121212;
+  --dark-primary-bg-color: #111827;
   --dark-secondary-bg-color: #202020;
   --dark-border-color: #202020;
   --dark-messagingView-bg-color: #1b1b1b;
