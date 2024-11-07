@@ -29,16 +29,22 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+        // Validate additional fields such as nic and indexNo
+        $request->validate([
+            'nic' => 'required|string|max:20',
+            'indexNo' => 'nullable|string|max:20',
+            'google_scholar' => 'nullable|url',
+            'github' => 'nullable|url',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         // Update the user's profile information with validated data
-        $user->fill($request->validated());
+        $user->fill($request->only([
+            'name', 'email', 'nic', 'indexNo', 'bio', 'google_scholar', 'github'
+        ]));
 
         // Handle profile image upload
         if ($request->hasFile('profile_image')) {
-            // Validate the uploaded image file
-            $request->validate([
-                'profile_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Set image types and max size
-            ]);
-
             // Delete the old profile image if it exists
             if ($user->profile_image) {
                 Storage::disk('public')->delete($user->profile_image);
@@ -61,13 +67,7 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
-        $request->validate([
-            'google_scholar' => 'nullable|url',
-            'github' => 'nullable|url',
-            // Other validation rules
-        ]);
-
-        $user = auth()->user();
+        // Set links for Google Scholar and GitHub if provided
         $user->google_scholar = $request->google_scholar;
         $user->github = $request->github;
 

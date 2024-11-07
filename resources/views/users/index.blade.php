@@ -6,8 +6,9 @@
             <form method="GET" action="{{ route('users.index') }}" class="inline-block">
                 <select name="role" onchange="this.form.submit()" class="bg-gray-800 text-white rounded px-3 py-2">
                     <option value="" {{ request('role') == '' ? 'selected' : '' }}>All Roles</option>
-                    <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
                     <option value="alumni" {{ request('role') == 'alumni' ? 'selected' : '' }}>Alumni</option>
+                    <option value="student" {{ request('role') == 'student' ? 'selected' : '' }}>Student</option>
+                    <option value="lecturer" {{ request('role') == 'lecturer' ? 'selected' : '' }}>Lecturer</option>
                 </select>
             </form>
 

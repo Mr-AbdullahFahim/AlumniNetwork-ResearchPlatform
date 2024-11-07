@@ -94,7 +94,7 @@
         </script>
 
         <!-- Jobs Section -->
-        @if($user->role!='user')
+        @if($user->role!='student')
         <div class="mb-8">
             <h3 class="text-xl font-semibold mb-4">Jobs and Internships</h3>
 
@@ -265,7 +265,7 @@
         </div>
 
         <!-- Job Modal -->
-        @if($user->role!='user')
+        @if($user->role!='student')
         <div id="jobModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-80">
             <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/3 h-5/6 overflow-y-auto max-h-screen">
                 <h3 class="text-xl font-semibold mb-4">Add Job/Internship</h3>

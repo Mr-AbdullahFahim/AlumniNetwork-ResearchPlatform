@@ -44,7 +44,7 @@
                     @foreach($teamMembers as $member)
                         <div class="bg-gray-700 rounded-lg shadow-lg overflow-hidden transform transition hover:scale-105">
                             <!-- Profile Image -->
-                            <img src="{{ $member->image ?? asset('images/default-profile.png') }}" alt="{{ $member->name }}" class="w-full h-52 object-cover">
+                            <img src="{{ $member->image ?? asset('images/default-profile.png') }}" alt="{{ $member->name }}" class="w-full h-52 object-contain rounded-full shadow-md">
 
                             <div class="p-6 text-center">
                                 <h3 class="text-2xl font-semibold text-white">{{ $member->name }}</h3>

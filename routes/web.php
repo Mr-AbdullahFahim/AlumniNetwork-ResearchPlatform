@@ -45,14 +45,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/{id}/unfollow', [UserController::class, 'unfollow'])->name('users.unfollow');
 });
 
-// Admin Dashboard Routes (Role-based access)
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-    ->middleware('role:admin')  // Ensure this middleware is correctly configured
-    ->name('admin.dashboard');
-
-// Route to redirect to admin dashboard
+// Admin-specific Routes
 Route::get('/admin', function () {
-    return redirect()->route('admin.dashboard');
+    return auth()->user()->role === 'admin' ? redirect()->route('admin.dashboard') : redirect()->route('dashboard');
 });
 
 // Research Articles Routes
@@ -65,9 +60,11 @@ Route::post('/research-articles/{id}/version', [ResearchArticleController::class
 
 
 // Admin Routes under prefix
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function (){
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/home', [AdminDashboardController::class, 'index'])->name('admin.home');
     Route::get('/approvals', [AdminDashboardController::class, 'approvals'])->name('admin.approvals');
+    Route::get('/admin/promote', [AdminDashboardController::class, 'promote'])->name('admin.promote');
     Route::get('/reports', [AdminDashboardController::class, 'reports'])->name('admin.reports');
     Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('admin.settings');
     Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('admin.profile');
@@ -83,6 +80,8 @@ Route::get('admin/users', [AdminDashboardController::class, 'indexUsers'])->name
 Route::delete('admin/users/{id}', [AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
 Route::post('admin/users/approve/{user}', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
 Route::patch('admin/users/remove/{user}', [AdminDashboardController::class, 'removeUser'])->name('admin.users.remove');
+Route::post('admin/users/promote/{user}', [AdminDashboardController::class, 'promoteToAdmin'])->name('admin.users.promote');
+Route::post('admin/users/depromote/{user}', [AdminDashboardController::class, 'depromoteFromAdmin'])->name('admin.users.depromote');
 
 // Waiting Room (pending approval)
 Route::get('/waiting-room', function () {
