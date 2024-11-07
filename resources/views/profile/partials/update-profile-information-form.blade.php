@@ -60,7 +60,7 @@
 
             <!-- Display current profile image or default profile image if not available -->
             <div class="mt-4">
-                <img src="{{ $user->profile_image ? asset('../../../storage/' . $user->profile_image) : asset('default-profile.png') }}" 
+                <img src="{{ $user->profile_image ? asset('../../../storage/' . $user->profile_image) : asset('profileDefault.png') }}" 
                      alt="Profile Image" class="w-24 h-24 rounded-full object-cover">
             </div>
         </div>
