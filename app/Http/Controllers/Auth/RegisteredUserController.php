@@ -33,18 +33,22 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:user,alumni,admin'],
+            'role' => ['required', 'in:student,alumni,lecturer'],
+            'nic' => ['required', 'string', 'max:12'],
+            'indexNo' => ['nullable', 'string', 'max:20'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-             'role' => $request->role,
+            'role' => $request->role,
+            'nic' => $request->nic,
+            'indexNo' => $request->indexNo,
         ]);
 
         event(new Registered($user));
 
-        return redirect()->route('login')->with('status', 'Registration successful! Please log in.');
+        return redirect()->route('login')->with('status', 'Registration successful! Please log in after admin approved.');
     }
 }

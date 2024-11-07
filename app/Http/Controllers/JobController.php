@@ -12,6 +12,12 @@ class JobController extends Controller
     {
         $recentJobs = Job::orderBy('created_at', 'desc')->take(3)->get();
         $user=auth()->user()->name;
+
+        // Check if the user is an admin or authenticated
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');  // Redirect admin to admin dashboard
+        }
+        
         return view('dashboard', compact('recentJobs','user'));
     }
 

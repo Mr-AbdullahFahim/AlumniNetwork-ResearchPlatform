@@ -77,4 +77,35 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
     }
+
+    public function promoteToAdmin(User $user)
+    {
+        if ($user->role !== 'admin') {
+            // Store the current role before promotion
+            $user->previous_role = $user->role;
+            $user->role = 'admin';
+            $user->save();
+
+            return redirect()->route('admin.users')->with('success', 'User promoted to admin successfully!');
+        }
+
+        return redirect()->route('admin.users')->with('error', 'User is already an admin.');
+    }
+
+    public function depromoteFromAdmin(User $user)
+    {
+        if ($user->role === 'admin' && $user->previous_role) {
+            // Restore the previous role
+            $user->role = $user->previous_role;
+            $user->previous_role = null;
+            $user->save();
+
+            return redirect()->route('admin.users')->with('success', 'Admin depromoted to their previous role successfully!');
+        }
+
+        return redirect()->route('admin.users')->with('error', 'Cannot depromote this user.');
+    }
+
+
+
 }
