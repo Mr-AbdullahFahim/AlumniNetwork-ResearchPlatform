@@ -19,11 +19,11 @@
             <div>
                 <a href="/">
                     <!-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> -->
-                    <img src="https://i.ibb.co/Pzqqywg/UOJ-AR-Platform2-removebg-preview.png" alt="AR Logo" class="w-24 h-24 object-contain rounded-md shadow-md">
+                    <img src="{{asset('conet.png')}}" alt="AR Logo" class="w-24 rounded-md" style="margin:-10px">
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-y-auto sm:rounded-lg">
                 {{ $slot }}
             </div>
         </div>

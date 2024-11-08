@@ -105,7 +105,23 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.users')->with('error', 'Cannot depromote this user.');
     }
+    public function reports()
+    {
+        // Example data aggregation
+        $userCountByRole = User::select('role')
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('role')
+            ->get();
 
+        $userCountByStatus = User::select('status')
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('status')
+            ->get();
 
-
+        // Pass the data to the view
+        return view('admin.reports', [
+            'userCountByRole' => $userCountByRole,
+            'userCountByStatus' => $userCountByStatus,
+        ]);
+    }
 }

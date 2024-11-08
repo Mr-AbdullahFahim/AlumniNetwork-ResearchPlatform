@@ -6,8 +6,8 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center justify-center p-4">
                     <a href="{{ route('dashboard') }}">
-                        <img src="https://i.ibb.co/Pzqqywg/UOJ-AR-Platform2-removebg-preview.png" alt="AR Logo" 
-                            class="h-20 w-auto object-contain rounded-md shadow-lg hover:scale-110 transition-transform duration-300">
+                        <img src="{{asset('conet.png')}}" alt="AR Logo" 
+                            class="h-20 w-auto object-contain rounded-md hover:scale-110 transition-transform duration-300">
                     </a>
                 </div>
 
@@ -47,7 +47,10 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('alumni.profile')">
+                        @php
+                            $profileRoute = Auth::user()->role == 'admin' ? route('admin.dashboard') : route('alumni.profile');
+                        @endphp
+                        <x-dropdown-link :href="$profileRoute">
                             {{ __('Profile') }}
                         </x-dropdown-link>
                         <x-dropdown-link :href="route('profile.edit')">

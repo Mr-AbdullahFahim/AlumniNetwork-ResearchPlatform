@@ -23,8 +23,9 @@ return new class extends Migration
             $table->string('google_scholar')->nullable();
             $table->string('github')->nullable();
             $table->string('role')->default('user');
+            $table->string('previous_role')->nullable();
             $table->string('status')->default('pending');
-            $table->string('nic')->unique()->nullable();
+            $table->string('nic')->unique();
             $table->string('indexNo')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -1,33 +1,17 @@
-<!-- sidebar.blade.php -->
-<div class="sidebar bg-dark text-white p-4 w-64 fixed h-full">
-    <a href="{{ route('dashboard') }}" class="{{ Request::is('/') ? 'active' : '' }} text-white">
-        <i class="fas fa-home"></i> Home
+<div class="sidebar bg-gray-800 text-gray-200 p-6 w-64 h-full flex flex-col space-y-6">
+    <!-- Sidebar Link with Active State and Hover Effect -->
+    <a href="{{ route('admin.home') }}" class="flex items-center space-x-3 text-gray-200 hover:text-gray-100 transition duration-150 ease-in-out {{ Request::is('admin/home') ? 'bg-gray-700 rounded-lg p-2' : '' }}">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
     </a>
-    <br>
-    <br>
 
-    <a href="{{ route('admin.home') }}" class="{{ Request::is('admin/home') ? 'active' : '' }} text-white">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
+    <a href="{{ route('admin.users') }}" class="flex items-center space-x-3 text-gray-200 hover:text-gray-100 transition duration-150 ease-in-out {{ Request::is('admin/users') ? 'bg-gray-700 rounded-lg p-2' : '' }}">
+        <i class="fas fa-users"></i>
+        <span>User Roles</span>
     </a>
-    <br>
-    <br>
 
-    <a href="{{ route('admin.users') }}" class="{{ Request::is('admin/users') ? 'active' : '' }} text-white">
-        <i class="fas fa-users"></i> User Roles
+    <a href="{{ route('admin.reports') }}" class="flex items-center space-x-3 text-gray-200 hover:text-gray-100 transition duration-150 ease-in-out {{ Request::is('admin/reports') ? 'bg-gray-700 rounded-lg p-2' : '' }}">
+        <i class="fas fa-chart-line"></i>
+        <span>Reports</span>
     </a>
-    <br>
-    <br>
-
-    <a href="{{ route('admin.promote') }}" class="{{ Request::is('admin/promote') ? 'active' : '' }} text-white">
-        <i class="fas fa-arrow-up"></i> Promote to Admin
-    </a>
-    <br>
-    <br>
-
-    <a href="{{ route('admin.reports') }}" class="{{ Request::is('admin/reports') ? 'active' : '' }} text-white">
-        <i class="fas fa-chart-line"></i> Reports
-    </a>
-    <br>
-    <br>
-
 </div>

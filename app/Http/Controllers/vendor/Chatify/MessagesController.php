@@ -63,6 +63,12 @@ class MessagesController extends Controller
         $fetch = User::where('id', $request['id'])->first();
         if($fetch){
             $userAvatar = Chatify::getUserWithAvatar($fetch)->profile_image;
+            if(!$userAvatar){
+                $userAvatar=asset('profileDefault.png');
+            }
+            else{
+                $userAvatar="../../../../storage/"+$userAvatar;
+            }
         }
         return Response::json([
             'favorite' => $favorite,
