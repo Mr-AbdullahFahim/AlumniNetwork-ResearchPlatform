@@ -31,7 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/settings', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/settings', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 // Registration Routes
 Route::get('register', [RegisteredUserController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
